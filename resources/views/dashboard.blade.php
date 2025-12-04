@@ -33,7 +33,7 @@
             Clock In
         </button>
         <button id="clockOutButton" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-            Clock Out
+            Clock Out    
         </button>
         <a href="{{ route('task.assign') }}">
             <button id="taskAssignButton" class="px-6 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">

@@ -39,6 +39,8 @@ RUN php artisan storage:link || true
 
 # Clear cache
 RUN php artisan optimize:clear || true
+RUN cat storage/logs/laravel.log || true
+
 
 # Permissions
 RUN chmod -R 775 storage bootstrap/cache

@@ -33,8 +33,6 @@ RUN printf "<Directory /var/www/html/public>\n\
 # Install Composer dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Generate APP_KEY if missing
-RUN php artisan key:generate || true
 
 # Create storage link
 RUN php artisan storage:link || true

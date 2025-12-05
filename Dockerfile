@@ -12,23 +12,35 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy project files
-COPY . /var/www/html
-
-# Set working dir
+# Set working directory
 WORKDIR /var/www/html
 
-# Install Composer
+# Copy composer first for caching
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Copy project files
+COPY . .
 
-# Give storage permissions
-RUN chmod -R 775 storage bootstrap/cache
-
-# Apache Document Root
+# Set Apache Document Root to public
 RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
+
+# Allow .htaccess
+RUN printf "<Directory /var/www/html/public>\n\
+    AllowOverride All\n\
+</Directory>" > /etc/apache2/conf-available/laravel.conf \
+    && a2enconf laravel
+
+# Install Composer dependencies
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Clear Laravel cache (VERY IMPORTANT)
+RUN php artisan config:clear || true
+RUN php artisan cache:clear || true
+RUN php artisan route:clear || true
+RUN php artisan view:clear || true
+
+# Permissions
+RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
 

@@ -43,6 +43,10 @@ RUN php artisan storage:link || true
 # Clear caches
 RUN php artisan optimize:clear || true
 
+# Run Seeder (ONLY ONCE)
+RUN php artisan db:seed --force || true
+
+
 EXPOSE 80
 
 # --------------------------

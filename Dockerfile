@@ -44,4 +44,8 @@ RUN php artisan storage:link || true
 RUN php artisan optimize:clear || true
 
 EXPOSE 80
-CMD ["apache2-foreground"]
+
+# --------------------------
+# IMPORTANT: Run migrations + start Apache
+# --------------------------
+CMD php artisan migrate --force && apache2-foreground

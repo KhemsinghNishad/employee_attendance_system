@@ -21,7 +21,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copy project files
 COPY . .
 
-# Set Apache Document Root
+# Set Apache Document Root to public/
 RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
 
 # Allow .htaccess
@@ -33,17 +33,15 @@ RUN printf "<Directory /var/www/html/public>\n\
 # Install Composer dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
+# Fix Permissions (THIS FIXES 500 ERROR)
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Create storage link
 RUN php artisan storage:link || true
 
-# Clear cache
+# Clear caches
 RUN php artisan optimize:clear || true
-RUN cat storage/logs/laravel.log || true
-
-
-# Permissions
-RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80
 CMD ["apache2-foreground"]

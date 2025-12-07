@@ -25,3 +25,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/tasks/{date}', [TaskController::class, 'tasks'])->name('tasks');
     Route::post('/task/store', [TaskController::class, 'store'])->name('task.store');
 });
+
+
+Route::post('employee-entry', [EmployeeController::class, 'employeeEntry'])->name('employee.entry');

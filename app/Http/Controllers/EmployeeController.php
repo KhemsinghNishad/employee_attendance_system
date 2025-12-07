@@ -82,7 +82,7 @@ class EmployeeController extends Controller
                 'address' => 'Bhilai',
                 'created_at' => $now,
                 'updated_at' => $now,
-            ],
+            ], 
             [
                 'name' => 'kamal',
                 'email' => 'kamal@example.com',

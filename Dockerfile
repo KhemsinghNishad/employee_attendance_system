@@ -51,4 +51,7 @@ EXPOSE 80
 # --------------------------
 # IMPORTANT: Run migrations + start Apache
 # --------------------------
-CMD php artisan migrate --force && apache2-foreground
+CMD php artisan migrate --force \
+ && php artisan db:seed --force \
+ && apache2-foreground
+
